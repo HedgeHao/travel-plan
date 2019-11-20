@@ -121,12 +121,7 @@ const travelPlan = [
 export default class Plan extends Component {
   constructor(props) {
     super(props);
-    this.myRef = React.createRef()
-    this.state = {
-      travelPlan: travelPlan,
-      page: "calendar",
-      currentSection: travelPlan[0][0].place
-    };
+    this.state = {travelPlan: travelPlan, page: "edit"};
   }
 
   componentWillMount() {
@@ -140,9 +135,7 @@ export default class Plan extends Component {
     else{
       return(
         <div className="side">
-          <Schedule travel={this.state.travelPlan}
-                    currentSection = {this.state.currentSection}
-                    setCurrentSection = {this.setCurrentSection}/>
+          <Schedule travel={this.state.travelPlan} />
         </div>);
     }
   }
@@ -156,24 +149,6 @@ export default class Plan extends Component {
     this.setState({page: pPage});
   }
 
-  setCurrentSection = (pPlace) => {
-    //this.setState({currentSection: pPlace});
-  }
-
-  onScroll = () => {
-    var scrollTop = this.myRef.current.scrollTop;
-    var rootElement = document.getElementById("scrollspy");
-    var elems = rootElement.childNodes;
-    elems.forEach((element) => {
-      let elemTop = element.offsetTop;
-      let elemBottom = elemTop + element.offsetHeight;
-      if (scrollTop >= elemTop - 100 && scrollTop <= elemBottom){
-        let id = element.id;
-        this.setState({currentSection: id});
-      }
-    })
-  }
-
   render() {
     return (
       <div className = "container row">
@@ -183,12 +158,10 @@ export default class Plan extends Component {
                 page = {this.state.page}/>
         {this.state.page === "calendar" && this.showSchedule()}
         {this.state.page === "calendar" && (
-          <div  id = "scrollspy" className = "content space"
-                ref = {this.myRef}
-                onScroll = {this.onScroll}>
+          <div className = "content">
             {this.state.travelPlan.map(element => {
-              return element.map((item,index) => {
-                return <Attractions travel = {item}/>;
+              return element.map(item => {
+                return <Attractions travel = {item} />;
               });
             })}
           {/*<button className = "scroll"><IoIosAdd style = {{ width: '2rem', height: '2rem' }}/></button>*/}

@@ -6,21 +6,23 @@ import "./mbStyles.scss";
 export default class Schedule extends Component {
   constructor(props) {
     super(props);
-    var toggleData = this.props.travel.map((elem) => true);
-    this.state = {
-      expandList: toggleData
-    }
   }
 
-  toggleDay = (pIndex) => {
-    var expand = this.state.expand
-    this.setState(prevState => {
-      const expandList = prevState.expandList;
-      expandList[pIndex] = !expandList[pIndex]
-      return {
-        expandList: expandList,
-      };
-    });
+  scrollToElement(pPlaceName) {
+    var pageElement = document.getElementById(pPlaceName);
+
+    var positionX = 0,
+        positionY = 0;
+
+
+        positionX += pageElement.offsetLeft;
+        positionY += pageElement.offsetTop;
+        pageElement = pageElement.offsetParent;
+        window.scrollTo(positionX, 1200);
+
+    pageElement.scrollIntoView();
+    alert(positionY);
+
   }
 
   render() {
@@ -30,24 +32,18 @@ export default class Schedule extends Component {
           return (
             <div>
               {/*<div className="schedule-day">Day {index + 1}</div>*/}
-              <div className = "schedule-day">
-                <div className = "dot bold"/>
-                <div className = "schedule-title" onClick = {() => this.toggleDay(index)}>
-                  Day {index + 1}
-                </div>
-              </div>
-              {this.state.expandList[index] == true && day.map(place => {
+              {day.map(place => {
                 return (
-                  <div className = {(this.props.currentSection == place.place ? "active" : "")}>
-                    <div className = "schedule-container">
-                      <div className = "dot"/>
-                      <div className = "schedule-title">
+                  <div className="schedule-item">
+                    <div className=" schedule-header">
+                      <div className="dot" />
+                      <div className="schedule-title">
                         {/*href={"#" + place.place}*/}
                         {/*onClick ={() =>this.scrollToElement(place.place)}*/}
-                        <a href = {"#" + place.place} onClick = {() => this.props.setCurrentSection(place.place)}>{place.place}</a>
+                        <a href={"#" + place.place}>{place.place}</a>
                       </div>
                     </div>
-                    <div className = "schedule-content">{place.time}</div>
+                    <div className="schedule-content">{place.time}</div>
                   </div>
                 );
               })}
